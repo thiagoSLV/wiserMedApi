@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+/**
+ * Class CreateDoctorsTable.
+ */
+class CreateDoctorsTable extends Migration
+{
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('doctors', function(Blueprint $table) {
+            $table->increments('id');
+            $table->bigInteger('cpf')->lenght(11)->nullable();
+            $table->bigInteger('cnpj')->lenght(14)->nullable();
+            $table->string('name');
+            $table->string('lastName');
+            $table->string('address');
+            $table->integer('crm');
+            $table->integer('phoneNumber');
+            $table->string('email');
+            $table->string('password');
+
+
+            $table->timestamps();
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('doctors');
+	}
+}
