@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+#     nginx-proxy:
+#         image: jwilder/nginx-proxy:alpine
+#         ports:
+#             - 9008:80
+#         volumes:
+#             - /var/run/docker.sock:/tmp/docker.sock:ro
+
+    app:
+        image: php
+        volumes:
+            - .:/var/www
+        working_dir: /var/www
+        links:
+            - db
+        depends_on:
+            - db
+        hostname: dev.integracaosgdw
+        tty: true
+
+    db:
+        image: postgres
+        restart: on-failure
+        ports:
+            - "5433:5432"
+
+    composer:
+        image: composer:1.9.0
+        volumes:
+            - .:/var/www
+        working_dir: /var/www
+        command: install
+        depends_on:
+            - app
