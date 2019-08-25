@@ -7,6 +7,15 @@ services:
 #             - 9008:80
 #         volumes:
 #             - /var/run/docker.sock:/tmp/docker.sock:ro
+    web:
+        image: richarvey/nginx-php-fpm
+        ports:
+          - "8000:80"
+          - "443:443"
+        volumes:
+            - ./development.conf:/etc/nginx/conf.d/default.conf
+            - ./development.conf:/etc/nginx/sites-available/default.conf
+            - .:/var/www
 
     app:
         build: ./docker
@@ -17,9 +26,8 @@ services:
             - db
         depends_on:
             - db
-        hostname: dev.integracaosgdw
         ports:
-            - 8000:80
+          - "9000:80"
         tty: true
 
     db:
@@ -28,17 +36,11 @@ services:
         ports:
             - "5433:5432"
         volumes:
-            # - /var/run/postgresql:/var/run/postgresql
-            # - /var/pgsql_socket:/var/pgsql_socket
+
             - ./database.sh:/docker-entrypoint-initdb.d/database.sh
         environment:
             - POSTGRES_USER=root
-                
-        # command: >
-        #     bash -c "ln -s /private/tmp/.s.PGSQL.5432 /var/pgsql_socket/ &&
-        #         su postgres &&
-        #         psql &&
-        #         CREATE DATABASE wiser_med"
+
     composer:
         image: composer:1.9.0
         volumes:
