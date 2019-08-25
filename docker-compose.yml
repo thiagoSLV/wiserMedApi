@@ -18,6 +18,8 @@ services:
         depends_on:
             - db
         hostname: dev.integracaosgdw
+        ports:
+            - 8000:80
         tty: true
 
     db:
