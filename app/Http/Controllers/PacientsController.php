@@ -42,27 +42,6 @@ class PacientsController extends Controller
         $this->repository = $repository;
         $this->validator  = $validator;
     }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $pacients = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $pacients,
-            ]);
-        }
-
-        return view('pacients.index', compact('pacients'));
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -72,57 +51,6 @@ class PacientsController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(PacientCreateRequest $request)
-    {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $pacient = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Pacient created.',
-                'data'    => $pacient->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $pacient = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $pacient,
-            ]);
-        }
-
-        return view('pacients.show', compact('pacient'));
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -204,13 +132,46 @@ class PacientsController extends Controller
         return redirect()->back()->with('message', 'Pacient deleted.');
     }
 
-    public function getAllPacients()
+    public function getAll()
     {
         return $this->repository->getAll();
     }
 
-    public function getPacient($id)
+    public function get($id)
     {
         return $this->repository->getPacient($id);
     }
+
+    public function store(PacientCreateRequest $request)
+    {
+        try {
+
+            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+
+            $pacient = $this->repository->create($request->all());
+
+            $response = [
+                'message' => 'Pacient created.',
+                'data'    => $pacient->toArray(),
+            ];
+
+            if ($request->wantsJson()) {
+
+                return response()->json($response);
+            }
+
+            return redirect()->back()->with('message', $response['message']);
+        } catch (ValidatorException $e) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'error'   => true,
+                    'message' => $e->getMessageBag()
+                ]);
+            }
+
+            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        }
+    }
+   
+
 }
