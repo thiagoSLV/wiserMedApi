@@ -204,13 +204,19 @@ class PacientsController extends Controller
         return redirect()->back()->with('message', 'Pacient deleted.');
     }
 
-    public function getAllPacients()
+    public function getAll()
     {
         return $this->repository->getAll();
     }
 
-    public function getPacient($id)
+    public function get($id)
     {
-        return $this->repository->getPacient($id);
+        return $this->repository->get($id);
+    }
+
+    public function save(Request $request)
+    {
+        dd(a);
+        return $this->repository->save($request);
     }
 }
