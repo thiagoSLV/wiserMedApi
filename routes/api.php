@@ -18,5 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/pacients', 'PacientsController@getAllPacients');
 // Route::get('/pacients', 'PacientsController@getAllPacients');
+
+Route::prefix('pacient')->group(function () {
+	Route::get('/', 'PacientsController@getAllPacients');
+	Route::get('/{id}', 'PacientsController@getPacient');
+});

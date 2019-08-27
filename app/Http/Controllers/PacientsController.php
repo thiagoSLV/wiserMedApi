@@ -9,7 +9,6 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\PacientCreateRequest;
 use App\Http\Requests\PacientUpdateRequest;
-use App\Http\Resources\PacientResource;
 use App\Repositories\PacientRepositoryEloquent;
 use App\Validators\PacientValidator;
 use App\Models\Pacient;
@@ -36,6 +35,7 @@ class PacientsController extends Controller
      *
      * @param PacientRepository $repository
      * @param PacientValidator $validator
+     * @param PacientResource $resource
      */
     public function __construct(PacientRepositoryEloquent $repository, PacientValidator $validator)
     {
@@ -206,8 +206,11 @@ class PacientsController extends Controller
 
     public function getAllPacients()
     {
-        $pacients = Pacient::paginate(15);
+        return $this->repository->getAll();
+    }
 
-        return PacientResource::collection($pacients);
+    public function getPacient($id)
+    {
+        return $this->repository->getPacient($id);
     }
 }
