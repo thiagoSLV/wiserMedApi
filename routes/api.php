@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::get('/pacients', 'PacientsController@getAllPacients');
 
 Route::prefix('pacient')->group(function () {
-	Route::get('/', 'PacientsController@getAll');
-	Route::get('/{id}', 'PacientsController@get');
-	Route::post('/', 'PacientsController@save');
+	Route::get('/',['as' => 'pacient.all', 'uses' => 'PacientsController@getAll']);
+	Route::get('/{id}',['as' => 'pacient', 'uses' => 'PacientsController@get']);
+	Route::post('/', 'PacientsController@store');
 });
