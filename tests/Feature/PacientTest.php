@@ -35,9 +35,19 @@ class PacientTest extends TestCase
                 'cpf' => (int)$pacient->cpf,
                 'phoneNumber' => $pacient->phoneNumber,
                 'email' => $pacient->email,
-            ])
-            ->assertJson(['data' => $pacient->toArray()]);
-        ;
+            ]);
+    }
+
+    public function testCreate()
+    {
+        $pacient = factory(Pacient::class)->create();
+
+        $response = $this->call('Post', route('pacient.store'));
+
+        $response->dumpHeaders();
+        $response
+            ->assertStatus(200);
+
     }
 
 }
