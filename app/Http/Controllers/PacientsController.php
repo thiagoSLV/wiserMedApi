@@ -139,7 +139,7 @@ class PacientsController extends Controller
 
     public function get($id)
     {
-        return $this->repository->get($id);
+        return $this->repository->getById($id);
     }
 
     public function save(Request $request)

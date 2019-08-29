@@ -60,7 +60,7 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
         return PacientResource::collection(Pacient::all());
     }
 
-    public function get($id)
+    public function getById($id)
     {
         return new PacientResource(Pacient::find($id));
     }
