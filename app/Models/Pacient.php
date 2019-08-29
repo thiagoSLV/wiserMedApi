@@ -31,6 +31,6 @@ class Pacient extends Model implements Transformable
 		'password',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
 }
