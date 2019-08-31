@@ -43,4 +43,7 @@ class Pacient extends Model implements Transformable
 
     public $timestamps = true;
 
+    public function getTable(){
+        return $this->table;
+    }
 }
