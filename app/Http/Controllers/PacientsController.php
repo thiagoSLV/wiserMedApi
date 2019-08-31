@@ -139,44 +139,17 @@ class PacientsController extends Controller
 
     public function get($id)
     {
-        return $this->repository->get($id);
+        return $this->repository->getById($id);
     }
 
-    public function save(Request $request)
-    {
-        dd(a);
-        return $this->repository->save($request);
-    }
+    // public function save(Request $request)
+    // {
+    //     return $this->repository->save($request);
+    // }
 
     public function store(PacientCreateRequest $request)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $pacient = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Pacient created.',
-                'data'    => $pacient->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        return $this->repository->save($request);
     }
    
 

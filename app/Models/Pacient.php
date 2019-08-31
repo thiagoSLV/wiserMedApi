@@ -22,7 +22,8 @@ class Pacient extends Model implements Transformable
      */
 	protected $table = 'pacients';
 
-    protected $fillable = [
+    protected $fields = [
+        'id',
     	'cpf',
 		'name',
 		'lastName',
@@ -31,6 +32,18 @@ class Pacient extends Model implements Transformable
 		'password',
     ];
 
-    public $timestamps = false;
+    protected $fillable = [
+        'cpf',
+        'name',
+        'lastName',
+        'phoneNumber',
+        'email',
+        'password',
+    ];
 
+    public $timestamps = true;
+
+    public function getTable(){
+        return $this->table;
+    }
 }
