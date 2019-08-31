@@ -22,13 +22,23 @@ class Pacient extends Model implements Transformable
      */
 	protected $table = 'pacients';
 
-    protected $fillable = [
+    protected $fields = [
+        'id',
     	'cpf',
 		'name',
 		'lastName',
 		'phoneNumber',
 		'email',
 		'password',
+    ];
+
+    protected $fillable = [
+        'cpf',
+        'name',
+        'lastName',
+        'phoneNumber',
+        'email',
+        'password',
     ];
 
     public $timestamps = true;

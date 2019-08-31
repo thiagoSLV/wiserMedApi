@@ -8,6 +8,8 @@ use App\Repositories\PacientRepository;
 use App\Models\Pacient;
 use App\Validators\PacientValidator;
 use App\Http\Resources\PacientResource;
+use Illuminate\Support\Facades\Validator;
+
 
 /**
  * Class PacientRepositoryEloquent.
@@ -67,26 +69,34 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
 
     public function save($request)
     {
-        try {
+        $validator = Validator::make($request->all(), [
+            'cpf' => 'required',
+            'name' => 'required',
+            'lastName' => 'required',
+            'phoneNumber' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+         ]);
 
-            $this->validator->with($request->all())->passesOrFail(PacientValidator::RULE_CREATE);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        } 
 
-            $pacient = $this->create($request->all());
+        $pacient = $this->create($request->all());
 
-            $response = [
-                'message' => 'Pacient created.',
-                'data'    => $pacient->toArray(),
-            ];
+        $response = [
+            'message' => 'Pacient created.',
+            'data'    => $pacient->toArray(),
+        ];
 
-            return response()->json($response);
+        return response()->json($response);
 
-        } catch (ValidatorException $e) {
-            return response()->json([
-                'error'   => true,
-                'message' => $e->getMessageBag()
-            ]);
 
-        }
+        // return response()->json([
+        //     'error'   => true,
+        //     'message' => $e->getMessageBag()
+        // ]);
+
     }
 
 }
