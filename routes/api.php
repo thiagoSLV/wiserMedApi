@@ -18,5 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/pacients', 'PacientsController@getAllPacients');
 // Route::get('/pacients', 'PacientsController@getAllPacients');
+
+Route::prefix('pacient')->group(function () {
+	Route::get('/',['as' => 'pacient.all', 'uses' => 'PacientsController@getAll']);
+	Route::get('/{id}',['as' => 'pacient', 'uses' => 'PacientsController@get']);
+	Route::post('/',['as' => 'pacient.store', 'uses' => 'PacientsController@store']);
+});
