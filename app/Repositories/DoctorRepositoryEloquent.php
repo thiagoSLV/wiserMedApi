@@ -52,24 +52,8 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
             if($request->get('cpf') === null && $request->get('cnpj') === null)
                 throw new RegisterException($request->get('name'), 400);
              
-            $table = Doctor::make()->getTable();
-    
-            $validator = Validator::make($request->all(), [
-                "cpf" => "numeric|digits:11|unique:{$table}",
-                "cnpj" => "numeric|digits:14|unique:{$table}",
-                "crm" => "numeric|unique:{$table}",
-                "name" => "required|alpha",
-                "lastName" => "required|alpha",
-                "phoneNumber" => "required|numeric|unique:{$table}",
-                "address" => "required|unique:{$table}",
-                "email" => "required|unique:{$table}",
-                "password" => "required",
-             ]);
-    
-            if ($validator->fails()) {
-                return response()->json($validator->messages(), 400);
-            } 
-    
+            $request->validate();
+            
             $doctor = $this->create($request->all());
     
             $response = [
