@@ -50,9 +50,9 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
         try
         {
             if($request->get('cpf') === null && $request->get('cnpj') === null)
-                throw new RegisterException($request->get('name'), 400);
+                throw new RegisterException('', 400);
              
-            $request->validate();
+            $request->validate([]);
             
             $doctor = $this->create($request->all());
     
