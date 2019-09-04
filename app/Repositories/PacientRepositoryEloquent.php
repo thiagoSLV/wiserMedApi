@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\Pacient;
+use App\Repositories\PacientRepository;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\PacientRepository;
-use App\Models\Pacient;
-use App\Validators\PacientValidator;
 use App\Http\Resources\PacientResource;
 use Illuminate\Support\Facades\Validator;
 
@@ -29,16 +28,6 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
     }
 
     /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
-        return PacientValidator::class;
-    }
-
-/**
     * Specify Resource class name
     *
     * @return mixed

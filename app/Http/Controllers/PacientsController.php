@@ -142,11 +142,6 @@ class PacientsController extends Controller
         return $this->repository->getById($id);
     }
 
-    // public function save(Request $request)
-    // {
-    //     return $this->repository->save($request);
-    // }
-
     public function store(PacientCreateRequest $request)
     {
         return $this->repository->save($request);

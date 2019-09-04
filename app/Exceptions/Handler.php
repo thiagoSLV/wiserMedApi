@@ -46,6 +46,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        $message = isset($exception->validator) ? ($exception->validator->messages()) : $exception->getMessage();
+        $code = isset($exception->status) ? $exception->status : $exception->getCode();
+
+        return response()->json($message, $code);
     }
 }
