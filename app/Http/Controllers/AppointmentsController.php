@@ -25,42 +25,27 @@ class AppointmentsController extends Controller
     protected $repository;
 
     /**
-     * @var AppointmentValidator
-     */
-    protected $validator;
-
-    /**
      * AppointmentsController constructor.
      *
      * @param AppointmentRepository $repository
      * @param AppointmentValidator $validator
      */
-    public function __construct(AppointmentRepository $repository, AppointmentValidator $validator)
+    public function __construct(AppointmentRepository $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAll()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $appointments = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $appointments,
-            ]);
-        }
-
-        return view('appointments.index', compact('appointments'));
+        dd('a');
+        return $this->repository->getAll();
     }
 
+    public function get($id)
+    {
+        return $this->repository->getById($id);
+    }
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -99,27 +84,6 @@ class AppointmentsController extends Controller
 
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $appointment = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $appointment,
-            ]);
-        }
-
-        return view('appointments.show', compact('appointment'));
     }
 
     /**
