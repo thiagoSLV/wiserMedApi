@@ -47,10 +47,9 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
 
     public function save($request)
     {
-        try
-        {
+
             if($request->get('cpf') === null && $request->get('cnpj') === null)
-                throw new RegisterException('', 400);
+                throw new RegisterException();
              
             $request->validate([]);
             
@@ -62,9 +61,5 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
             ];
     
             return response()->json($response);
-        } catch (\RegisterException $e)
-        {
-           return ($e);
-        }
     }
 }

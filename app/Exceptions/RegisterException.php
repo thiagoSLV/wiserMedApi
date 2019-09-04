@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class RegisterException extends Exception
 {
+    protected $message = "CPF or CNPJ must be given";
+    protected $code = 400;
+
     public function report()
     {
 
@@ -14,9 +17,8 @@ class RegisterException extends Exception
 
     public function render($request)
     {
-    	$this->message = "CPF or CNPJ must be given";
     	return response()->json([
-    		'message' => $this->message,
+    		'message' => $this->getMessage(),
     		'code' => $this->code,
     	], $this->code);
     }

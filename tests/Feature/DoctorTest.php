@@ -71,7 +71,7 @@ class DoctorTest extends TestCase
             ->assertStatus(400);
 
         $response = $this->call('POST', route($route, [
-            'cpf' => $fake->cpf(false),
+            'cpf' => $faker->cpf(false),
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
             'phoneNumber' => $doctor->phoneNumber,
@@ -86,11 +86,51 @@ class DoctorTest extends TestCase
 
         $response = $this->call('POST', route($route, [
             'name' => $doctor->name,
-            'cpf' => $fake->cpf(false),
+            'cpf' => $faker->cpf(false),
             'lastName' => $doctor->lastName,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
             'address' => $doctor->address,
+            'password' => $doctor->password,
+        ]));
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($route, [
+            'name' => $doctor->name,
+            'cnpj' => $faker->cnpj(false),
+            'crm' => $doctor->crm,
+            'email' => $doctor->email,
+            'address' => $doctor->address,
+            'password' => $doctor->password,
+        ]));
+
+        $response
+            ->dump()
+            ->assertStatus(422);  
+
+        $response = $this->call('POST', route($route, [
+            'name' => $doctor->name,
+            'cnpj' => $faker->cnpj(false),
+            'crm' => $doctor->crm,
+            'lastName' => $doctor->lastName,
+            'phoneNumber' => $doctor->phoneNumber,
+            'address' => $doctor->address,
+            'password' => $doctor->password,
+        ]));
+
+        $response
+            ->dump()
+            ->assertStatus(422);  
+
+        $response = $this->call('POST', route($route, [
+            'name' => $doctor->name,
+            'cnpj' => $faker->cnpj(false),
+            'crm' => $doctor->crm,
+            'lastName' => $doctor->lastName,
+            'phoneNumber' => $doctor->phoneNumber,
+            'email' => $doctor->email,
             'password' => $doctor->password,
         ]));
 
@@ -100,48 +140,7 @@ class DoctorTest extends TestCase
 
         $response = $this->call('POST', route($route, [
             'name' => $doctor->name,
-            'cnpj' => $fake->cnpj(false),
-            'crm' => $doctor->crm,
-            'email' => $doctor->email,
-            'address' => $doctor->address,
-            'password' => $doctor->password,
-        ]));
-
-        $response
-            ->dump()
-            ->assertStatus(422);  
-
-        $response = $this->call('POST', route($route, [
-            'name' => $doctor->name,
-            'cnpj' => $fake->cnpj(false),
-            'crm' => $doctor->crm,
-            'lastName' => $doctor->lastName,
-            'phoneNumber' => $doctor->phoneNumber,
-            'address' => $doctor->address,
-            'password' => $doctor->password,
-        ]));
-
-        $response
-            ->dump()
-            ->assertStatus(422);  
-
-        $response = $this->call('POST', route($route, [
-            'name' => $doctor->name,
-            'cnpj' => $fake->cnpj(false),
-            'crm' => $doctor->crm,
-            'lastName' => $doctor->lastName,
-            'phoneNumber' => $doctor->phoneNumber,
-            'email' => $doctor->email,
-            'password' => $doctor->password,
-        ]));
-
-        $response
-            ->dump()
-            ->assertStatus(422);
-
-        $response = $this->call('POST', route($route, [
-            'name' => $doctor->name,
-            'cnpj' => $fake->cnpj(false),
+            'cnpj' => $faker->cnpj(false),
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
             'phoneNumber' => $doctor->phoneNumber,
