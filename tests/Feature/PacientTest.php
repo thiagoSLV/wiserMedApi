@@ -194,6 +194,7 @@ class PacientTest extends TestCase
         $pacient = Pacient::find($id);
 
         $response
+            ->dump()
             ->assertStatus(200)
             ->assertJson([
                 'message' => 'Pacient created.',

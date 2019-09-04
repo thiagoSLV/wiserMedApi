@@ -28,7 +28,7 @@ class DoctorCreateRequest extends FormRequest
         return [
                 "cpf" => "numeric|digits:11|unique:{$table}",
                 "cnpj" => "numeric|digits:14|unique:{$table}",
-                "crm" => "numeric|unique:{$table}",
+                "crm" => "required|numeric|unique:{$table}",
                 "name" => "required|alpha",
                 "lastName" => "required|alpha",
                 "phoneNumber" => "required|numeric|unique:{$table}",

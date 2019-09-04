@@ -10,6 +10,7 @@ use Faker\Factory;
 
 class DoctorTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -93,6 +94,7 @@ class DoctorTest extends TestCase
             'address' => $doctor->address,
             'password' => $doctor->password,
         ]));
+
         $response
             ->dump()
             ->assertStatus(422);
@@ -221,22 +223,23 @@ class DoctorTest extends TestCase
         $response = $this->call('POST', route($route, $doctor->toArray()));
 
         $id = json_decode($response->getContent())->data->id;
-        $doctor = doctor::find($id);
+        $doctor = array_filter(Doctor::find($id)->toArray());
 
         $response
+            ->dump()
             ->assertStatus(200)
             ->assertJson([
-                'message' => 'doctor created.',
-                'data' => $doctor->toArray()
+                'message' => 'Doctor created.',
+                'data' => $doctor,
             ]);  
         //--------------------------------------------------------
 
         //Duplicated unique fields
-        $response = $this->call('POST', route($route, $doctor->toArray()));
+        $response = $this->call('POST', route($route, $doctor));
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
     }
 }
