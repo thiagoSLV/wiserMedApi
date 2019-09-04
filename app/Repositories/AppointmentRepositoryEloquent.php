@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Models\Appointment;
+use App\Repositories\AppointmentRepository;
+use App\Http\Resources\AppointmentResource;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\AppointmentRepository;
-use App\Models\Appointment;
-use App\Validators\AppointmentValidator;
 
 /**
  * Class AppointmentRepositoryEloquent.
@@ -26,16 +26,14 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
     }
 
     /**
-    * Specify Validator class name
+    * Specify Resource class name
     *
     * @return mixed
     */
-    public function validator()
+    public function resource()
     {
-
-        return AppointmentValidator::class;
+        return PacientResource::class;
     }
-
 
     /**
      * Boot up the repository, pushing criteria
@@ -44,5 +42,15 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    public function getAll()
+    {
+        return AppointmentResource::collection(Appointment::all());
+    }
+
+    public function getById($id)
+    {
+        return newAppointmentResource(Appointment::find($id));
+        // return AppointmentResource::collection(Appointment::all());
+    }
 }

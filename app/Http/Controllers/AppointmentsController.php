@@ -9,7 +9,7 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\AppointmentCreateRequest;
 use App\Http\Requests\AppointmentUpdateRequest;
-use App\Repositories\AppointmentRepository;
+use App\Repositories\AppointmentRepositoryEloquent;
 use App\Validators\AppointmentValidator;
 
 /**
@@ -20,24 +20,23 @@ use App\Validators\AppointmentValidator;
 class AppointmentsController extends Controller
 {
     /**
-     * @var AppointmentRepository
+     * @var AppointmentRepositoryEloquent
      */
     protected $repository;
 
     /**
      * AppointmentsController constructor.
      *
-     * @param AppointmentRepository $repository
+     * @param AppointmentRepositoryEloquent $repository
      * @param AppointmentValidator $validator
      */
-    public function __construct(AppointmentRepository $repository)
+    public function __construct(AppointmentRepositoryEloquent $repository)
     {
         $this->repository = $repository;
     }
 
     public function getAll()
     {
-        dd('a');
         return $this->repository->getAll();
     }
 
