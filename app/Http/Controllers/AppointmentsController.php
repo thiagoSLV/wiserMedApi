@@ -44,6 +44,11 @@ class AppointmentsController extends Controller
     {
         return $this->repository->getById($id);
     }
+
+    public function getPacientAndDoctor($id)
+    {
+        return $this->repository->getById($id);
+    }
     
     /**
      * Store a newly created resource in storage.
@@ -56,33 +61,7 @@ class AppointmentsController extends Controller
      */
     public function store(AppointmentCreateRequest $request)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $appointment = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Appointment created.',
-                'data'    => $appointment->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        return $this->repository->save($request);
     }
 
     /**

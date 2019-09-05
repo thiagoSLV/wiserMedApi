@@ -50,7 +50,21 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
 
     public function getById($id)
     {
-        return newAppointmentResource(Appointment::find($id));
-        // return AppointmentResource::collection(Appointment::all());
+        return new AppointmentResource(Appointment::find($id));
+    }
+
+    public function save($request)
+    {
+
+        $request->validate([]);
+
+        $appointment = $this->create($request->all());
+
+        $response = [
+            'message' => 'Pacient created.',
+            'data'    => $pacient->toArray(),
+        ];
+
+        return response()->json($response);
     }
 }
