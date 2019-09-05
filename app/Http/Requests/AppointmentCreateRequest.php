@@ -24,7 +24,10 @@ class AppointmentCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'doctor_id',
+            'pacient_id',
+            'Date',
+            'Time',
         ];
     }
 }
