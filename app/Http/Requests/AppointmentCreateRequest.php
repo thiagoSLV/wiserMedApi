@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Appointment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AppointmentCreateRequest extends FormRequest
@@ -13,7 +14,7 @@ class AppointmentCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,11 +24,14 @@ class AppointmentCreateRequest extends FormRequest
      */
     public function rules()
     {
+        $table = Appointment::make()->getTable();
         return [
-            'doctor_id',
-            'pacient_id',
-            'Date',
-            'Time',
+            'doctor_id' => "required|numeric",
+            'pacient_id' => "required|numeric",
+            'date' => "required|date_format:Y-m-d",
+            'time' => "required|date_format:H:i",
+            'price' => "required|numeric",
+            'procedure' => "required|",
         ];
     }
 }

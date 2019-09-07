@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
+use App\Exceptions\AppointmentRegisterException;
 use App\Http\Resources\AppointmentResource;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class AppointmentRepositoryEloquent.
@@ -55,14 +57,20 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
 
     public function save($request)
     {
+        $table = Appointment::make()->getTable();
+        $validate = DB::table($table)
+            ->where('date', $request->date)
+            ->where('time', $request->time)
+            ->first();
 
-        $request->validate([]);
+        if ($validate !== null)
+            throw new AppointmentRegisterException();
 
         $appointment = $this->create($request->all());
 
         $response = [
-            'message' => 'Pacient created.',
-            'data'    => $pacient->toArray(),
+            'message' => 'Appointment Registered.',
+            'data'    => $appointment->toArray(),
         ];
 
         return response()->json($response);

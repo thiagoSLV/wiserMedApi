@@ -25,8 +25,10 @@ class Appointment extends Model implements Transformable
     protected $fillable = [
     	'doctor_id',
 		'pacient_id',
-		'Date',
-		'Time',
+		'date',
+		'time',
+        'price',
+        'procedure',
     ];
 
     public $timestamps = true;

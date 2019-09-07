@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
         $message = isset($exception->validator) ? ($exception->validator->messages()) : $exception->getMessage();
         $code = isset($exception->status) ? $exception->status : $exception->getCode();
 
-        if($exception->getCode() == 0 || $exception->getCode() == -1)
+        if(!isset($exception->status) and ($exception->getCode() == 0 || $exception->getCode() == -1))
             $code = 500;
 
         return response()->json($message, $code);
