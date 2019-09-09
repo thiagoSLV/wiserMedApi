@@ -10,7 +10,6 @@ use Faker\Factory;
 
 class DoctorTest extends TestCase
 {
-    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
