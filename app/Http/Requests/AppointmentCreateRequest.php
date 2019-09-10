@@ -31,7 +31,7 @@ class AppointmentCreateRequest extends FormRequest
             'date' => "required|date_format:Y-m-d",
             'time' => "required|date_format:H:i",
             'price' => "required|numeric",
-            'procedure' => "required|",
+            'procedure' => "required|alpha",
         ];
     }
 }

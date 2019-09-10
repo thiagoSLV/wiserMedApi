@@ -46,7 +46,7 @@ class AppointmentTest extends TestCase
     public function testCreate()
     {
         $url = 'appointment.store';
-        $appointment = factory(Appointment::class)->make();
+        $appointment = factory(Appointment::class)->create();
         $faker = Factory::create('pt_BR');
 
         //Testing request without fields, bad request
@@ -123,5 +123,116 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
+        //Testing request with wrong data
+        //--------------------------------------------------------
+
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => $faker->word,
+            'pacient_id' => rand(1, 25),
+            'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
+            'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
+            'price' => rand(0,50000) / 100,
+            'procedure' => $faker->word,
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => rand(1, 25),
+            'pacient_id' => $faker->word,
+            'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
+            'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
+            'price' => rand(0,50000) / 100,
+            'procedure' => $faker->word,
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => rand(1, 25),
+            'pacient_id' => rand(1, 25),
+            'date' => $faker->word,
+            'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
+            'price' => rand(0,50000) / 100,
+            'procedure' => $faker->word,
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => rand(1, 25),
+            'pacient_id' => rand(1, 25),
+            'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
+            'time' => $faker->word,
+            'price' => rand(0,50000) / 100,
+            'procedure' => $faker->word,
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => rand(1, 25),
+            'pacient_id' => rand(1, 25),
+            'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
+            'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
+            'price' => $faker->word,
+            'procedure' => $faker->word,
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => rand(1, 25),
+            'pacient_id' => rand(1, 25),
+            'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
+            'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
+            'price' => rand(0,50000) / 100,
+            'procedure' => rand(1,100),
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        //create duplicated date request
+        //--------------------------------------------------------
+        $response = $this->call('POST', route($url, [
+            'doctor_id' => rand(1, 25),
+            'pacient_id' => rand(1, 25),
+            'date' => $appointment->date,
+            'time' => $appointment->time,
+            'price' => rand(0,50000) / 100,
+            'procedure' => $faker->word,
+        ]));
+        
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        //success request
+        //--------------------------------------------------------
+        $appointment = factory(Appointment::class)->make();
+
+        $response = $this->call('POST', route($url, $appointment->toArray()));
+
+        $id = json_decode($response->getContent())->data->id;
+        $appointment = array_filter(Appointment::find($id)->toArray());
+
+        $response
+            ->dump()
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'message' => 'Appointment Registered.',
+            ]);  
     }
 }
