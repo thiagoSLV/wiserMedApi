@@ -17,18 +17,18 @@ class AppointmentTest extends TestCase
      */
     public function testGetAll()
     {
-        $url = 'appointment.all';
-        $response = $this->call('GET', route($url));
+        $route = 'appointment.all';
+        $response = $this->call('GET', route($route));
 
         $response->assertStatus(200);
     }
     
     public function testGetById()
     {
-        $url = 'appointment';
+        $route = 'appointment';
         $appointment = factory(appointment::class)->create();
 
-        $response = $this->call('GET', route($url, ['id'=> $appointment->id]));
+        $response = $this->call('GET', route($route, ['id'=> $appointment->id]));
 
         $response
             ->assertStatus(200)
@@ -45,13 +45,13 @@ class AppointmentTest extends TestCase
 
     public function testCreate()
     {
-        $url = 'appointment.store';
+        $route = 'appointment.store';
         $appointment = factory(Appointment::class)->create();
         $faker = Factory::create('pt_BR');
 
         //Testing request without fields, bad request
         //--------------------------------------------------------
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
             'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
@@ -63,7 +63,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
             'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
@@ -75,7 +75,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
@@ -87,7 +87,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -99,7 +99,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -111,7 +111,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -126,7 +126,7 @@ class AppointmentTest extends TestCase
         //Testing request with wrong data
         //--------------------------------------------------------
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => $faker->word,
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -139,7 +139,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => $faker->word,
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -152,7 +152,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => $faker->word,
@@ -165,7 +165,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -178,7 +178,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -191,7 +191,7 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(422);
 
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
@@ -206,7 +206,7 @@ class AppointmentTest extends TestCase
 
         //create duplicated date request
         //--------------------------------------------------------
-        $response = $this->call('POST', route($url, [
+        $response = $this->call('POST', route($route, [
             'doctor_id' => rand(1, 25),
             'pacient_id' => rand(1, 25),
             'date' => $appointment->date,
@@ -223,7 +223,7 @@ class AppointmentTest extends TestCase
         //--------------------------------------------------------
         $appointment = factory(Appointment::class)->make();
 
-        $response = $this->call('POST', route($url, $appointment->toArray()));
+        $response = $this->call('POST', route($route, $appointment->toArray()));
 
         $id = json_decode($response->getContent())->data->id;
         $appointment = array_filter(Appointment::find($id)->toArray());
@@ -234,5 +234,20 @@ class AppointmentTest extends TestCase
             ->assertJsonFragment([
                 'message' => 'Appointment Registered.',
             ]);  
+    }
+
+    public function testGetByRange()
+    {
+        $init = date('Y-m-d', time());
+        $fin = date('Y-m-d', strtotime('+1 months'));
+        $route = 'appointment.date.range';
+
+        $response = $this->call('GET', route($route, [$init, $fin]));
+
+        $response
+            ->dump()
+            ->assertStatus(200);
+
+
     }
 }
