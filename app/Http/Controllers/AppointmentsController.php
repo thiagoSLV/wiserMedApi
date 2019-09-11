@@ -45,11 +45,11 @@ class AppointmentsController extends Controller
         return $this->repository->getById($id);
     }
 
-    public function getPacientAndDoctor($id)
+    public function getByRange($init, $fin)
     {
-        return $this->repository->getById($id);
+        return $this->repository->getByRange($init, $fin);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
