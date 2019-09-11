@@ -58,7 +58,7 @@ class PacientTest extends TestCase
         ]));
 
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment(['cpf' => ['The cpf field is required.']]);
 
         $response = $this->call('POST', route('pacient.store', [
@@ -70,7 +70,7 @@ class PacientTest extends TestCase
         ]));
 
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment(['name' => ['The name field is required.']]);  
 
         $response = $this->call('POST', route('pacient.store', [
@@ -82,7 +82,7 @@ class PacientTest extends TestCase
         ]));
 
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment(['lastName' => ['The last name field is required.']]);  
 
         $response = $this->call('POST', route('pacient.store', [
@@ -94,7 +94,7 @@ class PacientTest extends TestCase
         ]));
 
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment(['phoneNumber' => ['The phone number field is required.']]);  
 
         $response = $this->call('POST', route('pacient.store', [
@@ -106,7 +106,7 @@ class PacientTest extends TestCase
         ]));
 
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment(['email' => ['The email field is required.']]);  
 
         $response = $this->call('POST', route('pacient.store', [
@@ -118,7 +118,7 @@ class PacientTest extends TestCase
         ]));
 
         $response
-            ->assertStatus(400)
+            ->assertStatus(422)
             ->assertJsonFragment(['password' => ['The password field is required.']]);  
 
         //--------------------------------------------------------
@@ -135,7 +135,7 @@ class PacientTest extends TestCase
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
         $response = $this->call('POST', route('pacient.store', [
             'cpf' => rand(0,100),
@@ -147,7 +147,7 @@ class PacientTest extends TestCase
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
         $response = $this->call('POST', route('pacient.store', [
             'cpf' => rand(100000000000, 999999999999),
@@ -159,7 +159,7 @@ class PacientTest extends TestCase
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
         $response = $this->call('POST', route('pacient.store', [
             'cpf' => $pacient->cpf,
@@ -171,7 +171,7 @@ class PacientTest extends TestCase
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
         $response = $this->call('POST', route('pacient.store', [
             'cpf' => $pacient->cpf,
@@ -183,7 +183,7 @@ class PacientTest extends TestCase
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
         //--------------------------------------------------------
 
@@ -207,7 +207,7 @@ class PacientTest extends TestCase
 
         $response
             ->dump()
-            ->assertStatus(400);
+            ->assertStatus(422);
 
     }
 
