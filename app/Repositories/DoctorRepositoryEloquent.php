@@ -8,7 +8,7 @@ use App\Http\Resources\DoctorResource;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Illuminate\Support\Facades\Validator;
-use App\Exceptions\RegisterException;
+use App\Exceptions\DoctorRegisterException;
 
 /**
  * Class DoctorRepositoryEloquent.
@@ -49,10 +49,8 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
     {
 
             if($request->get('cpf') === null && $request->get('cnpj') === null)
-                throw new RegisterException();
-             
-            $request->validate([]);
-            
+                throw new DoctorRegisterException();
+
             $doctor = $this->create($request->all());
     
             $response = [

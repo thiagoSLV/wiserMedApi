@@ -2,7 +2,7 @@
 
 set -e
 
-sleep 30
+sleep 10
 php artisan migrate:refresh --seed
-
+chmod -R 777 storage/
 bash

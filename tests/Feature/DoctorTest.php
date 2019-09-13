@@ -10,13 +10,13 @@ use Faker\Factory;
 
 class DoctorTest extends TestCase
 {
-    use RefreshDatabase;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-
+    //refresh database for tests
+    public function setUp(): void
+    {
+        parent::setUp();
+        \Artisan::call('migrate:refresh');
+        \Artisan::call('db:seed');
+    }
     /**
      * A basic feature test example.
      *

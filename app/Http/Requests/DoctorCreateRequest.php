@@ -37,11 +37,4 @@ class DoctorCreateRequest extends FormRequest
                 "password" => "required",
         ];
     }
-
-    // public function messages()
-    // {
-    //     return [
-    //         'name.required' => 'Name is required!',
-    //     ];
-    // }
 }

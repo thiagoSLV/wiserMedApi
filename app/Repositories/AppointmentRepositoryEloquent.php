@@ -2,11 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Models\Appointment;
+use App\Repositories\AppointmentRepository;
+use App\Exceptions\AppointmentRegisterException;
+use App\Http\Resources\AppointmentResource;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\AppointmentRepository;
-use App\Models\Appointment;
-use App\Validators\AppointmentValidator;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 /**
  * Class AppointmentRepositoryEloquent.
@@ -26,16 +29,25 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
     }
 
     /**
-    * Specify Validator class name
+    * Specify Resource class name
     *
     * @return mixed
     */
-    public function validator()
+    public function resource()
     {
-
-        return AppointmentValidator::class;
+        return PacientResource::class;
     }
 
+    // public function validator(array $data)
+    // {
+    //     // $data would be an associative array like ['date_value' => '15.15.2015']
+    //     $message = [
+    //         'date_value.date' => 'invalid date'
+    //     ];
+    //     return Validator::make($data, [
+    //         'date_value' => 'date',
+    //     ],$message);
+    // }
 
     /**
      * Boot up the repository, pushing criteria
@@ -44,5 +56,47 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    public function getAll()
+    {
+        return AppointmentResource::collection(Appointment::all());
+    }
+
+    public function getById($id)
+    {
+        return new AppointmentResource(Appointment::find($id));
+    }
+
+    public function getByRange($init, $fin)
+    {
+        try
+        {
+            return AppointmentResource::collection(Appointment::whereBetween('date', array($init, $fin))->get());
+        } catch (Exception $e)
+        {
+            if($e->getCode() == 22007);
+                return response()->json("Invalid Date argument on request, inicial date: {$init}, final date: {$fin}", 400);
+        }
+    }
+
+    public function save($request)
+    {
+        $table = Appointment::make()->getTable();
+        $validate = DB::table($table)
+            ->where('date', $request->date)
+            ->where('time', $request->time)
+            ->first();
+
+        if ($validate !== null)
+            throw new AppointmentRegisterException();
+
+        $appointment = $this->create($request->all());
+
+        $response = [
+            'message' => 'Appointment Registered.',
+            'data'    => $appointment->toArray(),
+        ];
+
+        return response()->json($response);
+    }
 }

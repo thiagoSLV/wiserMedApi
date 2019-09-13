@@ -58,20 +58,6 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
 
     public function save($request)
     {
-        $table = Pacient::make()->getTable();
-
-        $validator = Validator::make($request->all(), [
-            "cpf" => "required|numeric|digits:11|unique:{$table}",
-            "name" => "required|alpha",
-            "lastName" => "required|alpha",
-            "phoneNumber" => "required|numeric|unique:{$table}",
-            "email" => "required|unique:{$table}",
-            "password" => "required",
-         ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        } 
 
         $pacient = $this->create($request->all());
 
