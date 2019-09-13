@@ -19,8 +19,10 @@ class CreateAppointmentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('doctor_id');
             $table->unsignedInteger('pacient_id');
-            $table->date('Date');
-            $table->time('Time');
+            $table->float('price', 4, 2);
+            $table->string('procedure');
+            $table->date('date');
+            $table->time('time');
 
             $table->timestamps();
 

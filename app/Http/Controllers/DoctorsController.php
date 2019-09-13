@@ -9,8 +9,8 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\DoctorCreateRequest;
 use App\Http\Requests\DoctorUpdateRequest;
-use App\Repositories\DoctorRepository;
-use App\Validators\DoctorValidator;
+use App\Repositories\DoctorRepositoryEloquent;
+use App\Validators\DoctorsValidator;
 
 /**
  * Class DoctorsController.
@@ -20,45 +20,19 @@ use App\Validators\DoctorValidator;
 class DoctorsController extends Controller
 {
     /**
-     * @var DoctorRepository
+     * @var DoctorRepositoryEloquent
      */
     protected $repository;
 
     /**
-     * @var DoctorValidator
-     */
-    protected $validator;
-
-    /**
      * DoctorsController constructor.
      *
-     * @param DoctorRepository $repository
-     * @param DoctorValidator $validator
+     * @param DoctorRepositoryEloquent $repository
+
      */
-    public function __construct(DoctorRepository $repository, DoctorValidator $validator)
+    public function __construct(DoctorRepositoryEloquent $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $doctors = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $doctors,
-            ]);
-        }
-
-        return view('doctors.index', compact('doctors'));
     }
 
     /**
@@ -72,56 +46,19 @@ class DoctorsController extends Controller
      */
     public function store(DoctorCreateRequest $request)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $doctor = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Doctor created.',
-                'data'    => $doctor->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        return $this->repository->save($request);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    
+    public function getAll()
     {
-        $doctor = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $doctor,
-            ]);
-        }
-
-        return view('doctors.show', compact('doctor'));
+        return $this->repository->getAll();
     }
 
+    public function get($id)
+    {
+        return $this->repository->getById($id);
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -150,8 +87,6 @@ class DoctorsController extends Controller
     {
         try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
             $doctor = $this->repository->update($request->all(), $id);
 
             $response = [
@@ -178,7 +113,6 @@ class DoctorsController extends Controller
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

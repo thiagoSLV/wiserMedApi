@@ -2,11 +2,13 @@
 
 namespace App\Repositories;
 
+use App\Models\Pacient;
+use App\Repositories\PacientRepository;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\PacientRepository;
-use App\Models\Pacient;
-use App\Validators\PacientValidator;
+use App\Http\Resources\PacientResource;
+use Illuminate\Support\Facades\Validator;
+
 
 /**
  * Class PacientRepositoryEloquent.
@@ -26,14 +28,13 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
     }
 
     /**
-    * Specify Validator class name
+    * Specify Resource class name
     *
     * @return mixed
     */
-    public function validator()
+    public function resource()
     {
-
-        return PacientValidator::class;
+        return PacientResource::class;
     }
 
 
@@ -45,4 +46,28 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
         $this->pushCriteria(app(RequestCriteria::class));
     }
     
+    public function getAll()
+    {
+        return PacientResource::collection(Pacient::all());
+    }
+
+    public function getById($id)
+    {
+        return new PacientResource(Pacient::find($id));
+    }
+
+    public function save($request)
+    {
+
+        $pacient = $this->create($request->all());
+
+        $response = [
+            'message' => 'Pacient created.',
+            'data'    => $pacient->toArray(),
+        ];
+
+        return response()->json($response);
+
+    }
+
 }

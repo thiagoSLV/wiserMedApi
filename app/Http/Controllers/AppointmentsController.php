@@ -9,7 +9,7 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\AppointmentCreateRequest;
 use App\Http\Requests\AppointmentUpdateRequest;
-use App\Repositories\AppointmentRepository;
+use App\Repositories\AppointmentRepositoryEloquent;
 use App\Validators\AppointmentValidator;
 
 /**
@@ -20,45 +20,34 @@ use App\Validators\AppointmentValidator;
 class AppointmentsController extends Controller
 {
     /**
-     * @var AppointmentRepository
+     * @var AppointmentRepositoryEloquent
      */
     protected $repository;
 
     /**
-     * @var AppointmentValidator
-     */
-    protected $validator;
-
-    /**
      * AppointmentsController constructor.
      *
-     * @param AppointmentRepository $repository
+     * @param AppointmentRepositoryEloquent $repository
      * @param AppointmentValidator $validator
      */
-    public function __construct(AppointmentRepository $repository, AppointmentValidator $validator)
+    public function __construct(AppointmentRepositoryEloquent $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAll()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $appointments = $this->repository->all();
+        return $this->repository->getAll();
+    }
 
-        if (request()->wantsJson()) {
+    public function get($id)
+    {
+        return $this->repository->getById($id);
+    }
 
-            return response()->json([
-                'data' => $appointments,
-            ]);
-        }
-
-        return view('appointments.index', compact('appointments'));
+    public function getByRange($init, $fin)
+    {
+        return $this->repository->getByRange($init, $fin);
     }
 
     /**
@@ -72,54 +61,7 @@ class AppointmentsController extends Controller
      */
     public function store(AppointmentCreateRequest $request)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $appointment = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Appointment created.',
-                'data'    => $appointment->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $appointment = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $appointment,
-            ]);
-        }
-
-        return view('appointments.show', compact('appointment'));
+        return $this->repository->save($request);
     }
 
     /**
