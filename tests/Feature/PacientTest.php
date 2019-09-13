@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\Validator;
 use Faker\Factory;
 
 class PacientTest extends TestCase
-{
+{    
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    //refresh database for tests
+    public function setUp(): void
+    {
+        parent::setUp();
+        \Artisan::call('migrate:refresh');
+        \Artisan::call('db:seed');
+    }
     public function testGetAll()
     {
         $response = $this->call('GET', route('pacient.all'));

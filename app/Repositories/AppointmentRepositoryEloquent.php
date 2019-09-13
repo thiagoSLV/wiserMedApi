@@ -74,7 +74,8 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
             return AppointmentResource::collection(Appointment::whereBetween('date', array($init, $fin))->get());
         } catch (Exception $e)
         {
-            return response()->json($e->getMessage(), 400);
+            if($e->getCode() == 22007);
+                return response()->json("Invalid Date argument on request, inicial date: {$init}, final date: {$fin}", 400);
         }
     }
 

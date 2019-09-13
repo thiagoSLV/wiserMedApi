@@ -8,8 +8,16 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Faker\Factory;
 
+
 class AppointmentTest extends TestCase
 {
+    //refresh database for tests
+    public function setUp(): void
+    {
+        parent::setUp();
+        \Artisan::call('migrate:refresh');
+        \Artisan::call('db:seed');
+    }
     /**
      * A basic feature test example.
      *
@@ -238,16 +246,45 @@ class AppointmentTest extends TestCase
 
     public function testGetByRange()
     {
+
         $init = date('Y-m-d', time());
         $fin = date('Y-m-d', strtotime('+1 months'));
         $route = 'appointment.date.range';
+
+        factory(Appointment::class, 6)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'teste',
+        ]);
+
+        //Success request
+        //--------------------------------------------------------------
 
         $response = $this->call('GET', route($route, [$init, $fin]));
 
         $response
             ->dump()
+            ->assertJsonFragment(['procedure' => 'teste'])
             ->assertStatus(200);
 
+        //Wrong date format
+        //--------------------------------------------------------------
+        
+        $response = $this->call('GET', route($route, [1, $fin]));
 
+        $response
+            ->dump()
+            ->assertStatus(400);
+        
+        $response = $this->call('GET', route($route, [$init, 1]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        $response = $this->call('GET', route($route, [$fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(200);
     }
 }
