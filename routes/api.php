@@ -35,6 +35,10 @@ Route::prefix('doctor')->group(function () {
 Route::prefix('appointment')->group(function () {
 	Route::get('/',['as' => 'appointment.all', 'uses' => 'AppointmentsController@getAll']);
 	Route::get('/{id}',['as' => 'appointment', 'uses' => 'AppointmentsController@get']);
-	Route::get('/{init}/{fin}',['as' => 'appointment.date.range', 'uses' => 'AppointmentsController@getByRange']);
+	Route::get('/pacient/{id}',['as' => 'appointment.appointment.pacient', 'uses' => 'AppointmentsController@getPacientAppointments']);
+	Route::get('/doctor/{id}',['as' => 'appointment.appointment.doctor', 'uses' => 'AppointmentsController@getDoctorAppointments']);
+	Route::get('/pacient/{id}/{init}/{fin}',['as' => 'appointment.appointment.pacient.date.range', 'uses' => 'AppointmentsController@getPacientAppointmentsByDateRange']);
+	Route::get('/doctor/{id}/{init}/{fin}',['as' => 'appointment.appointment.doctor.date.range', 'uses' => 'AppointmentsController@getDoctorAppointmentsByDateRange']);
+	Route::get('/{init}/{fin}',['as' => 'appointment.date.range', 'uses' => 'AppointmentsController@getByDateRange']);
 	Route::post('/',['as' => 'appointment.store', 'uses' => 'AppointmentsController@store']);
 });

@@ -62,12 +62,58 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
         return AppointmentResource::collection(Appointment::all());
     }
 
+    public function getDoctorAppointments($id)
+    {
+        return AppointmentResource::collection(
+            Appointment::
+                where('doctor_id', $id)
+                ->orderBy('date')
+                ->orderBy('time')
+                ->get()
+        );
+    }
+
+    public function getPacientAppointments($id)
+    {
+               return AppointmentResource::collection(
+            Appointment::
+                where('pacient_id', $id)
+                ->orderBy('date')
+                ->orderBy('time')
+                ->get()
+        );
+    }
+
+    public function getDoctorAppointmentsByDateRange($id, $init, $fin)
+    {
+        return AppointmentResource::collection(
+            Appointment::
+                where('doctor_id', $id)
+                ->whereBetween('date', array($init, $fin))
+                ->orderBy('date')
+                ->orderBy('time')
+                ->get()
+        );
+    }
+
+    public function getPacientAppointmentsByDateRange($id, $init, $fin)
+    {
+               return AppointmentResource::collection(
+            Appointment::
+                where('pacient_id', $id)
+                ->whereBetween('date', array($init, $fin))
+                ->orderBy('date')
+                ->orderBy('time')
+                ->get()
+        );
+    }
+
     public function getById($id)
     {
         return new AppointmentResource(Appointment::find($id));
     }
 
-    public function getByRange($init, $fin)
+    public function getByDateRange($init, $fin)
     {
         try
         {

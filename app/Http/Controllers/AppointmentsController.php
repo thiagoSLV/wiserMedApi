@@ -45,6 +45,26 @@ class AppointmentsController extends Controller
         return $this->repository->getById($id);
     }
 
+    public function getPacientAppointments($id)
+    {
+        return $this->repository->getPacientAppointments($id);
+    }
+
+    public function getDoctorAppointments($id)
+    {
+        return $this->repository->getDoctorAppointments($id);
+    }
+
+    public function getPacientAppointmentsByDateRange($id, $init, $fin)
+    {
+        return $this->repository->getPacientAppointmentsByDateRange($id, $init, $fin);
+    }
+
+    public function getDoctorAppointmentsByDateRange($id, $init, $fin)
+    {
+        return $this->repository->getDoctorAppointmentsByDateRange($id, $init, $fin);
+    }
+
     public function getByRange($init, $fin)
     {
         return $this->repository->getByRange($init, $fin);
