@@ -8,7 +8,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Http\Resources\PacientResource;
 use Illuminate\Support\Facades\Validator;
-
+use Exception;
 
 /**
  * Class PacientRepositoryEloquent.
@@ -53,7 +53,13 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
 
     public function getById($id)
     {
-        return new PacientResource(Pacient::find($id));
+        try{
+            return new PacientResource(Pacient::find($id));
+        } catch (Exception $e) 
+        {
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+        }
     }
 
     public function save($request)

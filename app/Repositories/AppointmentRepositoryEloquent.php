@@ -62,12 +62,98 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
         return AppointmentResource::collection(Appointment::all());
     }
 
-    public function getById($id)
+    public function getDoctorAppointments($id)
     {
-        return new AppointmentResource(Appointment::find($id));
+        try
+        {
+            return AppointmentResource::collection(
+                Appointment::
+                    where('doctor_id', $id)
+                    ->orderBy('date')
+                    ->orderBy('time')
+                    ->get()
+            );
+        } catch (Exception $e) 
+        {
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+        }
     }
 
-    public function getByRange($init, $fin)
+    public function getPacientAppointments($id)
+    {
+        try
+        {
+            return AppointmentResource::collection(
+                Appointment::
+                    where('pacient_id', $id)
+                    ->orderBy('date')
+                    ->orderBy('time')
+                    ->get()
+            );
+        } catch (Exception $e) 
+        {
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+        }
+    }
+
+    public function getDoctorAppointmentsByDateRange($id, $init, $fin)
+    {
+        try {
+            return AppointmentResource::collection(
+                Appointment::
+                    where('doctor_id', $id)
+                    ->whereBetween('date', array($init, $fin))
+                    ->orderBy('date')
+                    ->orderBy('time')
+                    ->get()
+            );
+        } catch (Exception $e)
+        {
+            if($e->getCode() == 22007);
+                return response()->json("Invalid Date argument on request, inicial date: {$init}, final date: {$fin}", 400);
+
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+            
+        }
+    }
+
+    public function getPacientAppointmentsByDateRange($id, $init, $fin)
+    {
+        try {
+            return AppointmentResource::collection(
+                Appointment::
+                    where('pacient_id', $id)
+                    ->whereBetween('date', array($init, $fin))
+                    ->orderBy('date')
+                    ->orderBy('time')
+                    ->get()
+            );
+        } catch (Exception $e)
+        {
+            if($e->getCode() == 22007);
+                return response()->json("Invalid Date argument on request, inicial date: {$init}, final date: {$fin}", 400);
+
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+
+        }
+    }
+
+    public function getById($id)
+    {
+        try{
+            return new AppointmentResource(Appointment::find($id));
+        } catch (Exception $e) 
+        {
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+        }
+    }
+
+    public function getByDateRange($init, $fin)
     {
         try
         {
