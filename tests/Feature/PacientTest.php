@@ -28,10 +28,13 @@ class PacientTest extends TestCase
 
     public function testGetById()
     {
+        $route = 'pacient';
         $pacient = factory(Pacient::class)->create();
 
-        $response = $this->call('GET', route('pacient', ['id'=> $pacient->id]));
+        $response = $this->call('GET', route($route, ['id'=> $pacient->id]));
 
+        //Success request
+        //------------------------------------------------------------------------
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -41,6 +44,14 @@ class PacientTest extends TestCase
                 'phoneNumber' => $pacient->phoneNumber,
                 'email' => $pacient->email,
             ]);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, 'string'));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
     }
 
     public function testCreate()
@@ -210,7 +221,6 @@ class PacientTest extends TestCase
         $response
             ->dump()
             ->assertStatus(422);
-
     }
 
 }

@@ -9,6 +9,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\DoctorRegisterException;
+use Exception;
 
 /**
  * Class DoctorRepositoryEloquent.
@@ -42,7 +43,13 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
 
     public function getById($id)
     {
-        return new DoctorResource(Doctor::find($id));
+        try{
+            return new DoctorResource(Doctor::find($id));
+        } catch (Exception $e) 
+        {
+            if ($e->getCode() == '22P02')
+                return response()->json("Invalid argument for id: {$id}", 400);
+        }
     }
 
     public function save($request)

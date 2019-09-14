@@ -38,6 +38,8 @@ class AppointmentTest extends TestCase
 
         $response = $this->call('GET', route($route, ['id'=> $appointment->id]));
 
+        //Success request
+        //------------------------------------------------------------------------
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -49,6 +51,14 @@ class AppointmentTest extends TestCase
                 'pacient_name' => $appointment->pacient->name,
                 'pacient_lastName' => $appointment->pacient->lastName,
             ]);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, 'string'));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
     }
 
     public function testCreate()
@@ -287,4 +297,249 @@ class AppointmentTest extends TestCase
             ->dump()
             ->assertStatus(200);
     }
+
+    public function testGetPacientAppointments()
+    {
+        $route = 'appointment.pacient';
+
+        factory(Appointment::class, 4)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'pacient_id' => 1
+        ]);
+
+        factory(Appointment::class, 4)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'dont get',
+            'pacient_id' => 2
+        ]);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, 'string'));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        //Success Request
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, 1)); //User already in database by docker entrypoint (application.sh)
+
+        $response
+            ->dump()
+            ->assertJsonFragment(['procedure' => 'get'])
+            ->assertJsonMissing(['procedure' => 'dont get'])
+            ->assertStatus(200);
+    }
+
+    public function testGetDoctorAppointments()
+    {
+        $route = 'appointment.doctor';
+
+        factory(Appointment::class, 4)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'doctor_id' => 1
+        ]);
+
+        factory(Appointment::class, 4)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'dont get',
+            'doctor_id' => 2
+        ]);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, 'string'));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        //Success Request
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, 1)); //User already in database by docker entrypoint (application.sh)
+
+        $response
+            ->dump()
+            ->assertJsonFragment(['procedure' => 'get'])
+            ->assertJsonMissing(['procedure' => 'dont get'])
+            ->assertStatus(200);
+    }
+
+    public function testGetPacientAppointmentsByDateRange()
+    {
+        $init = date('Y-m-d', time());
+        $fin = date('Y-m-d', strtotime('+1 months'));
+        $route = 'appointment.pacient.date.range';
+
+        factory(Appointment::class, 3)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'pacient_id' => 1,
+        ]);
+
+        factory(Appointment::class, 3)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'pacient_id' => 2,
+        ]);
+        $init = date('Y-m-d', time());
+        $fin = date('Y-m-d', strtotime('+1 months'));
+        $route = 'appointment.pacient.date.range';
+
+        factory(Appointment::class, 3)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'pacient_id' => 1,
+        ]);
+
+        factory(Appointment::class, 3)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'pacient_id' => 2,
+        ]);
+
+        //Success request
+        //--------------------------------------------------------------
+
+        $response = $this->call('GET', route($route, [1, $init, $fin]));
+
+        $response
+            ->dump()
+            ->assertJsonFragment(['procedure' => 'get'])
+            ->assertJsonMissing(['procedure' => 'dont get'])
+            ->assertStatus(200);
+
+        //Wrong date format
+        //--------------------------------------------------------------
+        
+        $response = $this->call('GET', route($route, [1, 1, $fin]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+        
+        $response = $this->call('GET', route($route, [1, $init, 1]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        $response = $this->call('GET', route($route, [1, $fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(200);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, ['string', $fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+        //Success request
+        //--------------------------------------------------------------
+
+        $response = $this->call('GET', route($route, [1, $init, $fin]));
+
+        $response
+            ->dump()
+            ->assertJsonFragment(['procedure' => 'get'])
+            ->assertJsonMissing(['procedure' => 'dont get'])
+            ->assertStatus(200);
+
+        //Wrong date format
+        //--------------------------------------------------------------
+        
+        $response = $this->call('GET', route($route, [1, 1, $fin]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+        
+        $response = $this->call('GET', route($route, [1, $init, 1]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        $response = $this->call('GET', route($route, [1, $fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(200);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, ['string', $fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+    }
+
+    public function testGetDoctorAppointmentsByDateRange()
+    {
+        $init = date('Y-m-d', time());
+        $fin = date('Y-m-d', strtotime('+1 months'));
+        $route = 'appointment.doctor.date.range';
+
+        factory(Appointment::class, 3)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'doctor_id' => 1,
+        ]);
+
+        factory(Appointment::class, 3)->create([
+            'date' => date('Y-m-d', rand(time(), strtotime('+15 days'))),
+            'procedure' => 'get',
+            'doctor_id' => 2,
+        ]);
+
+        //Success request
+        //--------------------------------------------------------------
+
+        $response = $this->call('GET', route($route, [1, $init, $fin]));
+
+        $response
+            ->dump()
+            ->assertJsonFragment(['procedure' => 'get'])
+            ->assertJsonMissing(['procedure' => 'dont get'])
+            ->assertStatus(200);
+
+        //Wrong date format
+        //--------------------------------------------------------------
+        
+        $response = $this->call('GET', route($route, [1, 1, $fin]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+        
+        $response = $this->call('GET', route($route, [1, $init, 1]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+
+        $response = $this->call('GET', route($route, [1, $fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(200);
+
+        //Wrong id format
+        //------------------------------------------------------------------------
+        $response = $this->call('GET', route($route, ['string', $fin, $init]));
+
+        $response
+            ->dump()
+            ->assertStatus(400);
+    }
 }
+
+
+
