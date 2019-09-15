@@ -31,6 +31,7 @@ class DoctorCreateRequest extends FormRequest
                 "crm" => "required|numeric|unique:{$table}",
                 "name" => "required|alpha",
                 "lastName" => "required|alpha",
+                "specialty" => "required|alpha",
                 "phoneNumber" => "required|numeric|unique:{$table}",
                 "address" => "required|unique:{$table}",
                 "email" => "required|unique:{$table}",

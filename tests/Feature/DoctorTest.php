@@ -29,6 +29,40 @@ class DoctorTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function testGetByEspecialty()
+    {
+        $route = 'doctor.specialty';
+
+        //Feeding table for "LIKE Search"
+        //------------------------------------------------------------------------
+        factory(Doctor::class)->create([
+            'specialty' => 'Teste',
+        ]);
+
+        factory(Doctor::class)->create([
+            'specialty' => 'Tes',
+        ]);
+
+        factory(Doctor::class)->create([
+            'specialty' => 'Teste extend.',
+        ]);
+
+        factory(Doctor::class)->create([
+            'specialty' => 'este',
+        ]);
+
+        $response = $this->call('GET', route($route, ['T']));
+
+        //Success request
+        //------------------------------------------------------------------------
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['specialty' => 'Teste'])
+            ->assertJsonFragment(['specialty' => 'Tes'])
+            ->assertJsonFragment(['specialty' => 'Teste extend.'])
+            ->assertJsonMissing(['specialty' => 'este']);
+    }
+
     public function testGetById()
     {
         $route = 'doctor';
@@ -72,6 +106,7 @@ class DoctorTest extends TestCase
             'name' => $doctor->name,
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
             'address' => $doctor->address,
@@ -86,6 +121,7 @@ class DoctorTest extends TestCase
             'cpf' => $faker->cpf(false),
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
             'address' => $doctor->address,
@@ -100,6 +136,7 @@ class DoctorTest extends TestCase
             'name' => $doctor->name,
             'cpf' => $faker->cpf(false),
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
             'address' => $doctor->address,
@@ -112,6 +149,7 @@ class DoctorTest extends TestCase
 
         $response = $this->call('POST', route($route, [
             'name' => $doctor->name,
+            'specialty' => $doctor->specialty,
             'cnpj' => $faker->cnpj(false),
             'crm' => $doctor->crm,
             'email' => $doctor->email,
@@ -128,6 +166,7 @@ class DoctorTest extends TestCase
             'cnpj' => $faker->cnpj(false),
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'address' => $doctor->address,
             'password' => $doctor->password,
@@ -142,6 +181,7 @@ class DoctorTest extends TestCase
             'cnpj' => $faker->cnpj(false),
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
             'password' => $doctor->password,
@@ -156,8 +196,23 @@ class DoctorTest extends TestCase
             'cnpj' => $faker->cnpj(false),
             'crm' => $doctor->crm,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
+        ]));
+
+        $response
+            ->dump()
+            ->assertStatus(422);  
+
+        $response = $this->call('POST', route($route, [
+            'name' => $doctor->name,
+            'cnpj' => $faker->cnpj(false),
+            'crm' => $doctor->crm,
+            'specialty' => $doctor->specialty,
+            'phoneNumber' => $doctor->phoneNumber,
+            'email' => $doctor->email,
+            'password' => $doctor->password,
         ]));
 
         $response
@@ -171,6 +226,7 @@ class DoctorTest extends TestCase
             'cpf' => $faker->word,
             'name' => $doctor->name,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
             'password' => $doctor->password,
@@ -184,6 +240,7 @@ class DoctorTest extends TestCase
             'cpf' => rand(0,100),
             'name' => $doctor->name,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
         ]));
@@ -196,6 +253,7 @@ class DoctorTest extends TestCase
             'cpf' => rand(100000000000, 999999999999),
             'name' => $doctor->name,
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
         ]));
@@ -208,6 +266,7 @@ class DoctorTest extends TestCase
             'cpf' => $doctor->cpf,
             'name' => rand(0,100),
             'lastName' => $doctor->lastName,
+            'specialty' => $doctor->specialty,
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
         ]));
@@ -220,6 +279,20 @@ class DoctorTest extends TestCase
             'cpf' => $doctor->cpf,
             'name' => $doctor->lastName,
             'lastName' => rand(0,100),
+            'specialty' => $doctor->specialty,
+            'phoneNumber' => $doctor->phoneNumber,
+            'email' => $doctor->email,
+        ]));
+
+        $response
+            ->dump()
+            ->assertStatus(422);
+
+        $response = $this->call('POST', route($route, [
+            'cpf' => $doctor->cpf,
+            'name' => $doctor->lastName,
+            'lastName' => $doctor->lastName,
+            'specialty' => rand(0,100),
             'phoneNumber' => $doctor->phoneNumber,
             'email' => $doctor->email,
         ]));
