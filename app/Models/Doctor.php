@@ -27,6 +27,7 @@ class Doctor extends Model implements Transformable
         'cnpj',
         'name',
         'lastName',
+        'specialty',
         'address',
         'crm',
         'phoneNumber',

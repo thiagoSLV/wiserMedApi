@@ -52,6 +52,11 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
         }
     }
 
+    public function getBySpecialty($specialty)
+    {
+        return  DoctorResource::collection(Doctor::where('specialty', 'LIKE', "{$specialty}%")->get());
+    }
+
     public function save($request)
     {
 
