@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Http\Request;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -25,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    // protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -35,5 +38,35 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('guest:doctor', [])->except('logout');
+        $this->middleware('guest:pacient', [])->except('logout');
+    }
+
+    public function doctorLogin(Request $request) {
+        if (Auth::guard('doctor')->attempt(['email' => $request->email, 'password' => '$request->password']))
+        {
+            return response()->json([
+                'code' => 200,
+            ]);
+        }
+        return response()->json([
+            'message' => "Efetue o Login para continuar",
+            'code' => 401,
+        ]);
+    }
+
+    public function pacientLogin(Request $request) {
+        // dd($request->password);d
+        dd(Auth::guard('pacient')->attempt(['password' => $request->password]));
+        if (Auth::guard('pacient')->attempt(array('name' => $request->email, 'password' => $request->password)))
+        {
+            return response()->json([
+                'code' => 200,
+            ]);
+        }
+        return response()->json([
+            'message' => "Efetue o Login para continuar",
+            'code' => 401,
+        ]);
     }
 }

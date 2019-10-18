@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
-
+    use Illuminate\Notifications\Notifiable;
+    use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * Class Doctor.
  *
  * @package namespace App\Models;
  */
-class Doctor extends Model implements Transformable
+class Doctor extends Authenticatable implements Transformable 
 {
     use TransformableTrait;
 
@@ -21,6 +22,8 @@ class Doctor extends Model implements Transformable
      * @var array
      */
 	protected $table = 'doctors';
+
+    protected $guard = 'doctor'; 
 
     protected $fillable = [
         'cpf',

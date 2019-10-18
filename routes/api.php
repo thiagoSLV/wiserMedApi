@@ -17,8 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 // Route::get('/pacients', 'PacientsController@getAllPacients');
+
+
+Route::prefix('/auth')->group(function () {
+	Route::post('/pacient', ['as' => 'pacient.authenticate', 'uses' => 'Auth\LoginController@pacientLogin']);
+	Route::post('/doctor', ['as' => 'doctor.authenticate', 'uses' => 'Auth\LoginController@doctorLogin']);
+});
 
 Route::prefix('pacient')->group(function () {
 	Route::get('/',['as' => 'pacient.all', 'uses' => 'PacientsController@getAll']);
