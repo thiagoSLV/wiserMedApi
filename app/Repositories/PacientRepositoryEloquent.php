@@ -8,6 +8,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Http\Resources\PacientResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Exception;
 
 /**
@@ -64,7 +65,10 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
 
     public function save($request)
     {
-        // dd($request->input('password'));
+        $request->merge([
+            'password' => Hash::make($request->input('password'))
+        ]);
+
         $pacient = $this->create($request->all());
 
         $response = [
