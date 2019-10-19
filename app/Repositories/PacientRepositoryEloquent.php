@@ -64,7 +64,7 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
 
     public function save($request)
     {
-
+        // dd($request->input('password'));
         $pacient = $this->create($request->all());
 
         $response = [

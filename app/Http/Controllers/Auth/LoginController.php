@@ -43,7 +43,7 @@ class LoginController extends Controller
     }
 
     public function doctorLogin(Request $request) {
-        if (Auth::guard('pacient')->attempt(array('name' => $request->email, 'password' => $request->password)))
+        if (Auth::guard('pacient')->attempt(array('email' => $request->email, 'password' => $request->password)))
         {
             return response()->json([
                 'message' => "Login efetuado",
@@ -55,7 +55,7 @@ class LoginController extends Controller
     }
 
     public function pacientLogin(Request $request) {
-        if (Auth::guard('pacient')->attempt(array('name' => $request->email, 'password' => $request->password)))
+        if (Auth::guard('pacient')->attempt(array('email' => $request->email, 'password' => $request->password)))
         {
             return response()->json([
                 'message' => "Login efetuado",
