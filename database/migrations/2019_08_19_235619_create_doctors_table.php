@@ -21,6 +21,7 @@ class CreateDoctorsTable extends Migration
             $table->bigInteger('cnpj')->lenght(14)->nullable();
             $table->string('name');
             $table->string('lastName');
+            $table->string('specialty');
             $table->string('address');
             $table->integer('crm');
             $table->integer('phoneNumber');

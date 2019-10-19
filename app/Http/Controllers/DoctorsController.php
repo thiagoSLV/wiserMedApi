@@ -60,6 +60,11 @@ class DoctorsController extends Controller
         return $this->repository->getById($id);
     }
     
+    public function getBySpecialty($especialty)
+    {
+        return $this->repository->getBySpecialty($especialty);
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *

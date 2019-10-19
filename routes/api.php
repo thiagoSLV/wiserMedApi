@@ -34,6 +34,7 @@ Route::prefix('pacient')->group(function () {
 Route::prefix('doctor')->group(function () {
 	Route::get('/',['as' => 'doctor.all', 'uses' => 'DoctorsController@getAll']);
 	Route::get('/{id}',['as' => 'doctor', 'uses' => 'DoctorsController@get']);
+	Route::get('/specialty/{specialty}',['as' => 'doctor.specialty', 'uses' => 'DoctorsController@getBySpecialty']);
 	Route::post('/',['as' => 'doctor.store', 'uses' => 'DoctorsController@store']);
 });
 

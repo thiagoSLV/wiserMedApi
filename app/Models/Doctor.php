@@ -31,6 +31,7 @@ class Doctor extends Authenticatable implements Transformable
         'cnpj',
         'name',
         'lastName',
+        'specialty',
         'address',
         'crm',
         'phoneNumber',

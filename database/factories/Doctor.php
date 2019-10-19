@@ -16,6 +16,7 @@ $factory->define(Doctor::class, function (Faker $faker) {
 		'cpf' => $fisico ? $faker->cpf(false) : NULL,
 		'cnpj' => !$fisico ? $faker->cnpj(false) : NULL,
 		'name' => $faker->firstName() ,
+		'specialty' => $faker->word ,
 		'lastName' => $faker->lastname() ,
 		'address' => $faker->address() ,
 		'crm' => rand(0,999) ,
