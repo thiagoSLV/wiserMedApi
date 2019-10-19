@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
-
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * Class Doctor.
  *
  * @package namespace App\Models;
  */
-class Doctor extends Model implements Transformable
+class Doctor extends Authenticatable implements Transformable 
 {
     use TransformableTrait;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +23,8 @@ class Doctor extends Model implements Transformable
      * @var array
      */
 	protected $table = 'doctors';
+
+    protected $guard = 'doctor'; 
 
     protected $fillable = [
         'cpf',
@@ -33,7 +37,13 @@ class Doctor extends Model implements Transformable
         'phoneNumber',
         'email',
         'password',
+
     ];
+
+    protected $hidden = [
+        'password',
+        'rememberToken', 
+    ]
 
     public $timestamps = true;
 

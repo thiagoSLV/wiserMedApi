@@ -12,6 +12,11 @@ class PacientsTableSeeder extends Seeder
      */
     public function run()
     {
+        // factory(Pacient::class)->create([
+        // 	'id' => 1,
+        // 	'email' => 'teste@gmail.com',
+        // 	'password' => 'abcde',
+        // ]);
         factory(Pacient::class, 25)->create();
     }
 }
