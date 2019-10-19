@@ -32,6 +32,7 @@ class DoctorsController extends Controller
      */
     public function __construct(DoctorRepositoryEloquent $repository)
     {
+        $this->middleware('auth:doctor');
         $this->repository = $repository;
     }
 
