@@ -39,6 +39,7 @@ class PacientsController extends Controller
      */
     public function __construct(PacientRepositoryEloquent $repository, PacientValidator $validator)
     {
+        $this->middleware('auth:pacient');
         $this->repository = $repository;
         $this->validator  = $validator;
     }

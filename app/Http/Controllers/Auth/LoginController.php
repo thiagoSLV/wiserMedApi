@@ -38,35 +38,33 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->middleware('guest:doctor', [])->except('logout');
-        $this->middleware('guest:pacient', [])->except('logout');
+        $this->middleware('guest:doctor')->except('logout');
+        $this->middleware('guest:pacient')->except('logout');
     }
 
     public function doctorLogin(Request $request) {
-        if (Auth::guard('doctor')->attempt(['email' => $request->email, 'password' => '$request->password']))
-        {
-            return response()->json([
-                'code' => 200,
-            ]);
-        }
-        return response()->json([
-            'message' => "Efetue o Login para continuar",
-            'code' => 401,
-        ]);
-    }
-
-    public function pacientLogin(Request $request) {
-        // dd($request->password);d
-        dd(Auth::guard('pacient')->attempt(['password' => $request->password]));
         if (Auth::guard('pacient')->attempt(array('name' => $request->email, 'password' => $request->password)))
         {
             return response()->json([
-                'code' => 200,
-            ]);
+                'message' => "Login efetuado",
+            ], 200);
         }
         return response()->json([
-            'message' => "Efetue o Login para continuar",
+            'message' => "Usuário e/ou senha inválidos",
+        ], 401);
+    }
+
+    public function pacientLogin(Request $request) {
+        if (Auth::guard('pacient')->attempt(array('name' => $request->email, 'password' => $request->password)))
+        {
+            return response()->json([
+                'message' => "Login efetuado",
+                'code' => 200,
+            ], 200);
+        }
+        return response()->json([
+            'message' => "Usuário e/ou senha inválidos",
             'code' => 401,
-        ]);
+        ], 401);
     }
 }
