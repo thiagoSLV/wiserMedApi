@@ -9,6 +9,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\DoctorRegisterException;
+use Illuminate\Support\Facades\Hash;
 use Exception;
 
 /**
@@ -59,17 +60,20 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
 
     public function save($request)
     {
+        $request->merge([
+            'password' => Hash::make($request->input('password'))
+        ]);
 
-            if($request->get('cpf') === null && $request->get('cnpj') === null)
-                throw new DoctorRegisterException();
+        if($request->get('cpf') === null && $request->get('cnpj') === null)
+            throw new DoctorRegisterException();
 
-            $doctor = $this->create($request->all());
-    
-            $response = [
-                'message' => 'Doctor created.',
-                'data'    => $doctor->toArray(),
-            ];
-    
-            return response()->json($response);
+        $doctor = $this->create($request->all());
+
+        $response = [
+            'message' => 'Doctor created.',
+            'data'    => $doctor->toArray(),
+        ];
+
+        return response()->json($response);
     }
 }

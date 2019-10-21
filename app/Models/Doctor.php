@@ -43,7 +43,7 @@ class Doctor extends Authenticatable implements Transformable
     protected $hidden = [
         'password',
         'rememberToken', 
-    ]
+    ];
 
     public $timestamps = true;
 

@@ -1,7 +1,11 @@
 FROM php
 
+COPY ./ /var/www/
+
 RUN apt-get update &&\
 	apt-get upgrade -y &&\ 
 	apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
-ENTRYPOINT ["/var/www/application.sh"]
+WORKDIR /var/www
+
+CMD ["/var/www/application.sh"]
