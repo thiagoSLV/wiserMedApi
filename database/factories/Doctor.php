@@ -20,8 +20,8 @@ $factory->define(Doctor::class, function (Faker $faker) {
 		'lastName' => $faker->lastname() ,
 		'address' => $faker->address() ,
 		'crm' => rand(0,999) ,
-		'phoneNumber' => rand(10000000, 99999999) ,
+		'phoneNumber' => rand(10000000, 99999999),
 		'email' => $faker->email() ,
-		'password' => rand(0,999) ,
+		'password' => Hash::make(rand(0,999)) ,
     ];
 });
