@@ -16,6 +16,6 @@ $factory->define(Pacient::class, function (Faker $faker) {
 		'lastName' => $faker->lastName(),
 		'phoneNumber' => rand(10000000, 99999999),
 		'email' => $faker->email(),
-		'password' => rand(0,9999),
+		'password' => Hash::make(rand(0,9999)),
     ];
 });
