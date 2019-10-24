@@ -63,6 +63,11 @@ class PacientRepositoryEloquent extends BaseRepository implements PacientReposit
         }
     }
 
+    public static function getByEmail($email)
+    {
+        return  PacientResource::collection(Pacient::where('email', 'LIKE', "{$email}")->get());
+    }
+
     public function save($request)
     {
         $request->merge([

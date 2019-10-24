@@ -10,6 +10,7 @@ use Faker\Factory;
 
 class DoctorTest extends TestCase
 {
+
     //refresh database for tests
     public function setUp(): void
     {
@@ -62,6 +63,24 @@ class DoctorTest extends TestCase
             ->assertJsonFragment(['specialty' => 'Teste extend.'])
             ->assertJsonMissing(['specialty' => 'este']);
     }
+//UNFINISHED TEST
+    // public function testGetByEmail()
+    // {
+    //     $route = 'doctor';
+
+    //     //Feeding table for "LIKE Search"
+    //     //------------------------------------------------------------------------
+    //     $doctor = factory(Doctor::class)->create([
+    //         'email' => 'doctorUnit@teste.com',
+    //     ]);
+
+    //     $response = $this->call('GET', route($route, $doctor->id));
+    //     $repositoryResponse = \App\Repositories\DoctorRepositoryEloquent::getByEmail($doctor->email)->all();
+
+    //     //Success request
+    //     //------------------------------------------------------------------------
+
+    // }
 
     public function testGetById()
     {

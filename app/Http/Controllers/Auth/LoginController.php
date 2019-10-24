@@ -31,6 +31,14 @@ class LoginController extends Controller
     // protected $redirectTo = '/home';
 
     /**
+     * Request Response.
+     *
+     * @var array
+     */
+    // protected $redirectTo = '/home';
+       protected $response = [];
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -45,10 +53,12 @@ class LoginController extends Controller
     public function doctorLogin(Request $request) {
         if (Auth::guard('doctor')->attempt(array('email' => $request->email, 'password' => $request->password)))
         {
-            return response()->json([
-                'message' => "Login efetuado",
-            ], 200);
+            $data = \App\Repositories\DoctorRepositoryEloquent::getByEmail($request->email)->all();
+            dd(\App\Repositories\DoctorRepositoryEloquent::getByEmail($request->email)->all());
+            array_push($this->response, ['message' => "Login efetuado", 'data' => $data]);
+            return $this->response;
         }
+
         return response()->json([
             'message' => "Usuário e/ou senha inválidos",
         ], 401);
@@ -57,14 +67,12 @@ class LoginController extends Controller
     public function pacientLogin(Request $request) {
         if (Auth::guard('pacient')->attempt(array('email' => $request->email, 'password' => $request->password)))
         {
-            return response()->json([
-                'message' => "Login efetuado",
-                'code' => 200,
-            ], 200);
+            $data = \App\Repositories\PacientRepositoryEloquent::getByEmail($request->email)->all();
+            array_push($this->response, ['message' => "Login efetuado", 'data' => $data]);
+            return $this->response;
         }
         return response()->json([
             'message' => "Usuário e/ou senha inválidos",
-            'code' => 401,
         ], 401);
     }
 }
