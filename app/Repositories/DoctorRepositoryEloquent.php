@@ -39,7 +39,7 @@ class DoctorRepositoryEloquent extends BaseRepository implements DoctorRepositor
     
     public function getAll()
     {
-        return DoctorResource::collection(Doctor::all());
+        return response()->json(DoctorResource::collection(Doctor::all()));
     }
 
     public function getById($id)

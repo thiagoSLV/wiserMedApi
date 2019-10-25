@@ -53,10 +53,12 @@ class LoginController extends Controller
     public function doctorLogin(Request $request) {
         if (Auth::guard('doctor')->attempt(array('email' => $request->email, 'password' => $request->password)))
         {
-            $data = \App\Repositories\DoctorRepositoryEloquent::getByEmail($request->email)->all();
-            dd(\App\Repositories\DoctorRepositoryEloquent::getByEmail($request->email)->all());
-            array_push($this->response, ['message' => "Login efetuado", 'data' => $data]);
-            return $this->response;
+            $data = \App\Repositories\DoctorRepositoryEloquent::getByEmail($request->email)->first();
+
+            return response()->json([
+                'message' => "Login efetuado",
+                'user' => $data
+            ]);
         }
 
         return response()->json([
@@ -67,9 +69,12 @@ class LoginController extends Controller
     public function pacientLogin(Request $request) {
         if (Auth::guard('pacient')->attempt(array('email' => $request->email, 'password' => $request->password)))
         {
-            $data = \App\Repositories\PacientRepositoryEloquent::getByEmail($request->email)->all();
-            array_push($this->response, ['message' => "Login efetuado", 'data' => $data]);
-            return $this->response;
+            $data = \App\Repositories\PacientRepositoryEloquent::getByEmail($request->email)->first();
+
+            return response()->json([
+                'message' => "Login efetuado",
+                'user' => $data
+            ]);
         }
         return response()->json([
             'message' => "Usuário e/ou senha inválidos",
