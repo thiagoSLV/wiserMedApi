@@ -22,7 +22,8 @@ class CreateAppointmentsTable extends Migration
             $table->float('price', 4, 2);
             $table->string('procedure');
             $table->date('date');
-            $table->time('time');
+			$table->time('init');
+            $table->time('finish');			
 
             $table->timestamps();
 

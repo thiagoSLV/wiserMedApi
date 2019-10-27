@@ -26,7 +26,8 @@ class Appointment extends Model implements Transformable
     	'doctor_id',
 		'pacient_id',
 		'date',
-		'time',
+        'init',
+        'finish',
         'price',
         'procedure',
     ];

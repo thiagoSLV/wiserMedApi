@@ -38,20 +38,6 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
         return PacientResource::class;
     }
 
-    // public function validator(array $data)
-    // {
-    //     // $data would be an associative array like ['date_value' => '15.15.2015']
-    //     $message = [
-    //         'date_value.date' => 'invalid date'
-    //     ];
-    //     return Validator::make($data, [
-    //         'date_value' => 'date',
-    //     ],$message);
-    // }
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
@@ -70,7 +56,7 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
                 Appointment::
                     where('doctor_id', $id)
                     ->orderBy('date')
-                    ->orderBy('time')
+                    ->orderBy('init')
                     ->get()
             );
         } catch (Exception $e) 
@@ -88,7 +74,7 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
                 Appointment::
                     where('pacient_id', $id)
                     ->orderBy('date')
-                    ->orderBy('time')
+                    ->orderBy('init')
                     ->get()
             );
         } catch (Exception $e) 
@@ -128,7 +114,6 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
                     where('pacient_id', $id)
                     ->whereBetween('date', array($init, $fin))
                     ->orderBy('date')
-                    ->orderBy('time')
                     ->get()
             );
         } catch (Exception $e)

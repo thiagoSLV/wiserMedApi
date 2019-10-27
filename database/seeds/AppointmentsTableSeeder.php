@@ -13,5 +13,12 @@ class AppointmentsTableSeeder extends Seeder
     public function run()
     {
         factory(Appointment::class, 25)->create();
+
+        factory(Appointment::class, 3)->create([
+            'pacient_id' => 26,
+            'doctor_id' => 26,
+        ]);
+
+
     }
 }

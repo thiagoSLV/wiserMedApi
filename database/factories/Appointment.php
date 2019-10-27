@@ -7,11 +7,14 @@ use Faker\Generator as Faker;
 use Faker\Factory as Factory;
 
 $factory->define(Appointment::class, function (Faker $faker) {
+	$init = date('H:m', rand(strtotime('06:00'), strtotime('17:59')));
+
     return [
     	'doctor_id' => rand(1,25),
 		'pacient_id' => rand(1,25),
 		'date' => date('Y-m-d', rand(time(), strtotime('+2 months'))),
-		'time' => date('H:m', rand(strtotime('06:00'), strtotime('17:59'))),
+		'init' => $init, 
+		'finish' => date('H:m', rand(strtotime($init), strtotime('17:59'))),
 		'price' => rand(0,50000) / 100,
 		'procedure' => $faker->word,
     ];
