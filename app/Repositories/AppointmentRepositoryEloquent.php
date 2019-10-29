@@ -92,7 +92,6 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
                     where('doctor_id', $id)
                     ->whereBetween('date', array($init, $fin))
                     ->orderBy('date')
-                    ->orderBy('time')
                     ->get()
             );
         } catch (Exception $e)
@@ -155,7 +154,8 @@ class AppointmentRepositoryEloquent extends BaseRepository implements Appointmen
         $table = Appointment::make()->getTable();
         $validate = DB::table($table)
             ->where('date', $request->date)
-            ->where('time', $request->time)
+            ->where('init', $request->init)
+            ->where('finish', $request->finish)
             ->first();
 
         if ($validate !== null)

@@ -29,7 +29,8 @@ class AppointmentCreateRequest extends FormRequest
             'doctor_id' => "required|numeric",
             'pacient_id' => "required|numeric",
             'date' => "required|date_format:Y-m-d",
-            'time' => "required|date_format:H:i",
+            'init' => "required|date_format:H:i",
+            'finish' => "required|date_format:H:i",
             'price' => "required|numeric",
             'procedure' => "required|alpha",
         ];
