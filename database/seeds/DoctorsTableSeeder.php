@@ -13,8 +13,8 @@ class DoctorsTableSeeder extends Seeder
     public function run()
     {
         factory(Doctor::class, 25)->create([
-            'latitude' => rand(-50, 50) ,
-            'longitude' => rand(-50, 50) ,
+            // 'latitude' => -5.973402,
+            // 'longitude' => -56.192980
         ]);
 
         factory(Doctor::class)->create([
