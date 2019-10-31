@@ -33,6 +33,8 @@ class Doctor extends Authenticatable implements Transformable
         'lastName',
         'specialty',
         'address',
+        'latitude',
+        'longitude',
         'crm',
         'phoneNumber',
         'email',

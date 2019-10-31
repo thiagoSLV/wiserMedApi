@@ -34,6 +34,8 @@ class DoctorCreateRequest extends FormRequest
                 "specialty" => "required|alpha",
                 "phoneNumber" => "required|numeric|unique:{$table}",
                 "address" => "required|unique:{$table}",
+                "latitude" => "required|unique:{$table}",
+                "longitude" => "required|unique:{$table}",
                 "email" => "required|unique:{$table}",
                 "password" => "required",
         ];
