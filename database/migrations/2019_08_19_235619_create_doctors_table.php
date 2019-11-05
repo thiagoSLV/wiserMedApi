@@ -23,8 +23,8 @@ class CreateDoctorsTable extends Migration
             $table->string('lastName');
             $table->string('specialty');
             $table->string('address');
-            $table->decimal('latitude', 8,14);
-            $table->decimal('longitude', 9,14);
+            $table->decimal('latitude', 16,14);
+            $table->decimal('longitude', 17,14);
             $table->integer('crm');
             $table->integer('phoneNumber');
             $table->string('email');
